@@ -11,10 +11,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\CartProject.Application\CartProject.Application.csproj" />
     <ProjectReference Include="..\CartProject.Infra.IoC\CartProject.Infra.IoC.csproj" />
   </ItemGroup>

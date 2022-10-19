@@ -38,9 +38,13 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
         await Delete(objId);
     }
 
+    public async Task<bool> Exists(Guid id) => await Exists(obj => obj.Id == id);
+    public async Task<bool> Exists(Expression<Func<TEntity, bool>> predicate) =>
+        await _context.Set<TEntity>().AnyAsync(predicate);
+
     public Task<TEntity?> Get(Guid id) => Get(obj => obj.Id == id);
 
-    public async Task<TEntity?> Get(Expression<Func<TEntity, bool>> predicate) => await _context.Set<TEntity>().FindAsync(predicate);
+    public async Task<TEntity?> Get(Expression<Func<TEntity, bool>> predicate) => await _context.Set<TEntity>().FirstOrDefaultAsync(predicate);
 
     public async Task<TResult?> GetDTO<TResult>(
         Expression<Func<TEntity, TResult>> select,
@@ -48,15 +52,24 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
     ) => await _context.Set<TEntity>().Where(predicate).Select(select).FirstOrDefaultAsync();
 
     public async Task<IEnumerable<TEntity>> Select(
-        Expression<Func<TEntity, bool>> predicate,
+        Expression<Func<TEntity, bool>>? predicate = null,
         int page = 1,
         int take = 0
-    ) => await _context.Set<TEntity>().Where(predicate).Skip(take * (page - 1)).Take(take).ToListAsync();
+    ) => await _context.Set<TEntity>()
+        .Where(predicate ?? (obj => true))
+        .Skip(take * (page - 1))
+        .Take(take == 0 ? int.MaxValue : take)
+        .ToListAsync();
 
     public async Task<IEnumerable<TResult>> SelectDTO<TResult>(
         Expression<Func<TEntity, TResult>> select,
-        Expression<Func<TEntity, bool>> predicate,
+        Expression<Func<TEntity, bool>>? predicate = null,
         int page = 1,
         int take = 0
-    ) => await _context.Set<TEntity>().Where(predicate).Select(select).Skip(take * (page - 1)).Take(take).ToListAsync();
+    ) => await _context.Set<TEntity>()
+        .Where(predicate ?? (obj => true))
+        .Select(select)
+        .Skip(take * (page - 1))
+        .Take(take == 0 ? int.MaxValue : take)
+        .ToListAsync();
 }
