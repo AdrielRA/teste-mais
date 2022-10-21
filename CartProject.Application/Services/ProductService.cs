@@ -13,12 +13,14 @@ public class ProductService : IProductService
 {
     private readonly IBaseRepository<Product> _repository;
 
-    public ProductService(IBaseRepository<Product> repository) => _repository = repository;    
+    public ProductService(IBaseRepository<Product> repository) => _repository = repository;
 
     public async Task<ResultResponse<Guid>> Insert(ProductInputModel input)
     {
         var validationResult = new ProductInputModelValidator().Validate(input);
         if (!validationResult.IsValid) return ResultService.RequestError<Guid>("Dados inválidos", validationResult);
+
+        if (await _repository.Exists(p => p.Code == input.Code)) return ResultService.Fail<Guid>("Já existe outro produto com o código informado");
 
         var id = await _repository.Insert(input.ToModel());
 
@@ -48,6 +50,8 @@ public class ProductService : IProductService
         if (!validationResult.IsValid) return ResultService.RequestError("Dados inválidos", validationResult);
 
         if (!await _repository.Exists(update.Id)) return ResultService.Fail("Produto não encontrado");
+
+        if (await _repository.Exists(p => p.Id != update.Id && p.Code == update.Code)) ResultService.Fail("Já existe outro produto com o código informado");
 
         await _repository.Update(update.ToModel());
 

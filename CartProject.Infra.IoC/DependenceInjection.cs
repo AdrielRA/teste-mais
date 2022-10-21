@@ -22,6 +22,7 @@ public static class DependenceInjection
     public static IServiceCollection AddRepositories(this IServiceCollection services)
     {
         services.AddScoped<IBaseRepository<Product>, BaseRepository<Product>>();
+        services.AddScoped<IBaseRepository<Cart>, BaseRepository<Cart>>();
 
         return services;
     }
@@ -29,6 +30,7 @@ public static class DependenceInjection
     public static IServiceCollection AddServices(this IServiceCollection services)
     {
         services.AddScoped<IProductService, ProductService>();
+        services.AddScoped<ICartService, CartService>();
 
         return services;
     }

@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using CartProject.Api.Middlewares;
 using CartProject.Infra.IoC;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -26,5 +27,6 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
+app.UseMiddleware<ExceptionMiddleware>();
 
 app.Run();

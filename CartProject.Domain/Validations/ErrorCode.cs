@@ -33,4 +33,28 @@ public enum ErrorCode
     EX00012,
     [Description("Conta desativada")]
     EX00013,
+    [Description("Nome não pode ser nulo")]
+    EX00014,
+    [Description("Nome não deve estar vazio")]
+    EX00015,
+    [Description("Nome informado é inválido")]
+    EX00016,
+    [Description("Nome deve ter pelo menos 10 caracteres")]
+    EX00017,
+    [Description("Nome deve ter no máximo 100 caracteres")]
+    EX00018,
+    [Description("Valor não pode ser nulo")]
+    EX00019,
+    [Description("Valor não deve estar vazio")]
+    EX00020,
+    [Description("Valor deve ser maior que zero")]
+    EX00021,
+    [Description("Código não pode ser nulo")]
+    EX00022,
+    [Description("Código não deve estar vazio")]
+    EX00023,
+    [Description("Código deve conter apenas letras e números")]
+    EX00024,
+    [Description("Código deve ter pelo menos 6 caracteres")]
+    EX00025,
 }
